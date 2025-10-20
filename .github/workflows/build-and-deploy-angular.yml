@@ -59,11 +59,27 @@ jobs:
             ls -la dist || true
             exit 1
           fi
-          # SPA fallback for deep links
+
+          echo "Contents of $DIST_DIR:"
+          ls -la "$DIST_DIR"
+
+          # Prefer prerendered index.html if present.
+          if [ -f "$DIST_DIR/index.html" ]; then
+            echo "Found prerendered index.html; using it."
+          elif [ -f "$DIST_DIR/index.csr.html" ]; then
+            echo "index.html not found; renaming index.csr.html -> index.html"
+            mv "$DIST_DIR/index.csr.html" "$DIST_DIR/index.html"
+          else
+            echo "Neither index.html nor index.csr.html found in $DIST_DIR"
+            exit 1
+          fi
+
+          # SPA deep-link fallback
           cp "$DIST_DIR/index.html" "$DIST_DIR/404.html"
+
           # Avoid Jekyll processing on GitHub Pages
           touch "$DIST_DIR/.nojekyll"
-
+          
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
