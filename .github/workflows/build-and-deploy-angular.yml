@@ -15,9 +15,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  # Angular project name per your angular.json
   NG_APP_NAME: resume-builder
-  # Derive base-href for project pages (user.github.io/<repo>/)
   BASE_HREF: /${{ github.event.repository.name }}/
 
 jobs:
@@ -40,16 +38,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Build notes:
-      # - Your angular.json uses the application builder with SSR output.
-      # - For GitHub Pages (static hosting), we deploy ONLY the browser build.
-      # - We set base-href to "/<repo>/" so assets work on project pages.
-      # - If your Angular version supports prerender, the flag is kept; otherwise it is ignored.
+      # Build: we deploy the browser output only (static)
       - name: Build (Angular)
         run: |
           npm run build -- --configuration=production --base-href "${BASE_HREF}" --prerender || \
           npm run build -- --configuration=production --base-href "${BASE_HREF}"
-      
+
       - name: Prepare static output (browser only)
         run: |
           DIST_DIR="dist/${NG_APP_NAME}/browser"
@@ -59,11 +53,10 @@ jobs:
             ls -la dist || true
             exit 1
           fi
-
           echo "Contents of $DIST_DIR:"
           ls -la "$DIST_DIR"
 
-          # Prefer prerendered index.html if present.
+          # Prefer prerendered index.html; otherwise rename CSR entry
           if [ -f "$DIST_DIR/index.html" ]; then
             echo "Found prerendered index.html; using it."
           elif [ -f "$DIST_DIR/index.csr.html" ]; then
@@ -74,14 +67,15 @@ jobs:
             exit 1
           fi
 
-          # SPA deep-link fallback
+          # SPA deep-link fallback + disable Jekyll
           cp "$DIST_DIR/index.html" "$DIST_DIR/404.html"
-
-          # Avoid Jekyll processing on GitHub Pages
           touch "$DIST_DIR/.nojekyll"
-          
+
+      # This will also ENABLE Pages if it's not already enabled
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - name: Upload artifact (static site)
         uses: actions/upload-pages-artifact@v3
