@@ -1,0 +1,389 @@
+<div class="form-container">
+  <div class="form-header">
+    <h1>Create Your Resume</h1>
+    <p>Fill in your information to generate a professional, ATS-optimized resume</p>
+  </div>
+
+  <form [formGroup]="cvForm" (ngSubmit)="onSubmit()">
+    
+    <!-- Personal Information Section -->
+    <section class="form-section">
+      <h2 class="section-title">Personal Information</h2>
+      <div formGroupName="personalInfo" class="form-grid">
+        <div class="form-group full-width">
+          <label for="name">Full Name *</label>
+          <input 
+            id="name" 
+            type="text" 
+            formControlName="name"
+            placeholder="e.g., Victor Tran"
+            [class.invalid]="isFieldInvalid('personalInfo.name')">
+          <span class="error" *ngIf="isFieldInvalid('personalInfo.name')">
+            {{ getErrorMessage('personalInfo.name') }}
+          </span>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="title">Professional Title *</label>
+          <input 
+            id="title" 
+            type="text" 
+            formControlName="title"
+            placeholder="e.g., Software Developer | Full-Stack Engineer"
+            [class.invalid]="isFieldInvalid('personalInfo.title')">
+          <span class="error" *ngIf="isFieldInvalid('personalInfo.title')">
+            {{ getErrorMessage('personalInfo.title') }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input 
+            id="email" 
+            type="email" 
+            formControlName="email"
+            placeholder="your.email@example.com"
+            [class.invalid]="isFieldInvalid('personalInfo.email')">
+          <span class="error" *ngIf="isFieldInvalid('personalInfo.email')">
+            {{ getErrorMessage('personalInfo.email') }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone *</label>
+          <input 
+            id="phone" 
+            type="tel" 
+            formControlName="phone"
+            placeholder="+1 234 567 8900"
+            [class.invalid]="isFieldInvalid('personalInfo.phone')">
+          <span class="error" *ngIf="isFieldInvalid('personalInfo.phone')">
+            {{ getErrorMessage('personalInfo.phone') }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="location">Location *</label>
+          <input 
+            id="location" 
+            type="text" 
+            formControlName="location"
+            placeholder="City, Country"
+            [class.invalid]="isFieldInvalid('personalInfo.location')">
+          <span class="error" *ngIf="isFieldInvalid('personalInfo.location')">
+            {{ getErrorMessage('personalInfo.location') }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="linkedin">LinkedIn Profile</label>
+          <input 
+            id="linkedin" 
+            type="text" 
+            formControlName="linkedin"
+            placeholder="linkedin.com/in/yourprofile">
+        </div>
+
+        <div class="form-group">
+          <label for="github">GitHub Profile</label>
+          <input 
+            id="github" 
+            type="text" 
+            formControlName="github"
+            placeholder="github.com/yourusername">
+        </div>
+      </div>
+    </section>
+
+    <!-- Professional Summary Section -->
+    <section class="form-section">
+      <h2 class="section-title">Professional Summary</h2>
+      <div class="form-group full-width">
+        <label for="summary">Summary *</label>
+        <textarea 
+          id="summary" 
+          formControlName="professionalSummary"
+          rows="5"
+          placeholder="Write a brief professional summary highlighting your experience, skills, and career goals (minimum 50 characters)"
+          [class.invalid]="isFieldInvalid('professionalSummary')"></textarea>
+        <span class="error" *ngIf="isFieldInvalid('professionalSummary')">
+          {{ getErrorMessage('professionalSummary') }}
+        </span>
+        <span class="hint">{{ cvForm.get('professionalSummary')?.value?.length || 0 }} characters</span>
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="form-section">
+      <h2 class="section-title">Core Competencies / Skills</h2>
+      <div formArrayName="skills">
+        <div *ngFor="let skill of skills.controls; let i = index" class="array-item">
+          <div class="form-group">
+            <label>Skill {{ i + 1 }} *</label>
+            <div class="input-with-button">
+              <input 
+                type="text" 
+                [formControlName]="i"
+                placeholder="e.g., Angular, React, TypeScript, HTML5, CSS3">
+              <button type="button" class="btn-remove" (click)="removeSkill(i)" [disabled]="skills.length === 1">
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="btn-add" (click)="addSkill()">+ Add Skill</button>
+    </section>
+
+    <!-- Work Experience Section -->
+    <section class="form-section">
+      <h2 class="section-title">Professional Experience</h2>
+      <div formArrayName="workExperience">
+        <div *ngFor="let exp of workExperience.controls; let i = index" 
+             [formGroupName]="i" 
+             class="nested-section">
+          <h3 class="subsection-title">Experience {{ i + 1 }}</h3>
+          
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Job Title *</label>
+              <input type="text" formControlName="jobTitle" placeholder="e.g., Senior Software Engineer">
+            </div>
+
+            <div class="form-group">
+              <label>Company *</label>
+              <input type="text" formControlName="company" placeholder="e.g., Tech Company Inc.">
+            </div>
+
+            <div class="form-group">
+              <label>Location *</label>
+              <input type="text" formControlName="location" placeholder="e.g., San Francisco, CA">
+            </div>
+
+            <div class="form-group">
+              <label>Start Date *</label>
+              <input type="text" formControlName="startDate" placeholder="e.g., Jan 2020">
+            </div>
+
+            <div class="form-group">
+              <label>End Date *</label>
+              <input type="text" formControlName="endDate" placeholder="e.g., Present">
+            </div>
+          </div>
+
+          <!-- Responsibilities -->
+          <div class="form-group full-width">
+            <label>Responsibilities & Achievements *</label>
+            <div formArrayName="responsibilities">
+              <div *ngFor="let resp of getResponsibilities(i).controls; let j = index" class="array-item">
+                <div class="input-with-button">
+                  <textarea 
+                    [formControlName]="j"
+                    rows="2"
+                    placeholder="Describe a key responsibility or achievement"></textarea>
+                  <button type="button" class="btn-remove" (click)="removeResponsibility(i, j)" [disabled]="getResponsibilities(i).length === 1">
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn-add-small" (click)="addResponsibility(i)">+ Add Responsibility</button>
+          </div>
+
+          <button type="button" class="btn-remove-section" (click)="removeWorkExperience(i)" [disabled]="workExperience.length === 1">
+            Remove This Experience
+          </button>
+        </div>
+      </div>
+      <button type="button" class="btn-add" (click)="addWorkExperience()">+ Add Work Experience</button>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="form-section">
+      <h2 class="section-title">Highlighted Projects</h2>
+      <div formArrayName="projects">
+        <div *ngFor="let project of projects.controls; let i = index" 
+             [formGroupName]="i" 
+             class="nested-section">
+          <h3 class="subsection-title">Project {{ i + 1 }}</h3>
+          
+          <div class="form-group full-width">
+            <label>Project Name *</label>
+            <input type="text" formControlName="name" placeholder="e.g., E-commerce Platform">
+          </div>
+
+          <div class="form-group full-width">
+            <label>Description *</label>
+            <textarea 
+              formControlName="description"
+              rows="3"
+              placeholder="Brief description of the project"></textarea>
+          </div>
+
+          <!-- Technologies -->
+          <div class="form-group full-width">
+            <label>Technologies Used *</label>
+            <div formArrayName="technologies">
+              <div *ngFor="let tech of getTechnologies(i).controls; let j = index" class="array-item">
+                <div class="input-with-button">
+                  <input 
+                    type="text"
+                    [formControlName]="j"
+                    placeholder="e.g., React, Node.js, MongoDB">
+                  <button type="button" class="btn-remove" (click)="removeTechnology(i, j)" [disabled]="getTechnologies(i).length === 1">
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn-add-small" (click)="addTechnology(i)">+ Add Technology</button>
+          </div>
+
+          <!-- Highlights -->
+          <div class="form-group full-width">
+            <label>Key Highlights *</label>
+            <div formArrayName="highlights">
+              <div *ngFor="let highlight of getHighlights(i).controls; let j = index" class="array-item">
+                <div class="input-with-button">
+                  <textarea 
+                    [formControlName]="j"
+                    rows="2"
+                    placeholder="Describe a key achievement or feature"></textarea>
+                  <button type="button" class="btn-remove" (click)="removeHighlight(i, j)" [disabled]="getHighlights(i).length === 1">
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn-add-small" (click)="addHighlight(i)">+ Add Highlight</button>
+          </div>
+
+          <button type="button" class="btn-remove-section" (click)="removeProject(i)" [disabled]="projects.length === 1">
+            Remove This Project
+          </button>
+        </div>
+      </div>
+      <button type="button" class="btn-add" (click)="addProject()">+ Add Project</button>
+    </section>
+
+    <!-- Education Section -->
+    <section class="form-section">
+      <h2 class="section-title">Education</h2>
+      <div formGroupName="education" class="form-grid">
+        <div class="form-group">
+          <label for="degree">Degree *</label>
+          <input 
+            id="degree" 
+            type="text" 
+            formControlName="degree"
+            placeholder="e.g., Bachelor of Computer Science"
+            [class.invalid]="isFieldInvalid('education.degree')">
+          <span class="error" *ngIf="isFieldInvalid('education.degree')">
+            {{ getErrorMessage('education.degree') }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="institution">Institution *</label>
+          <input 
+            id="institution" 
+            type="text" 
+            formControlName="institution"
+            placeholder="e.g., Stanford University"
+            [class.invalid]="isFieldInvalid('education.institution')">
+          <span class="error" *ngIf="isFieldInvalid('education.institution')">
+            {{ getErrorMessage('education.institution') }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="edu-location">Location *</label>
+          <input 
+            id="edu-location" 
+            type="text" 
+            formControlName="location"
+            placeholder="e.g., Stanford, CA"
+            [class.invalid]="isFieldInvalid('education.location')">
+          <span class="error" *ngIf="isFieldInvalid('education.location')">
+            {{ getErrorMessage('education.location') }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="graduation">Graduation Year *</label>
+          <input 
+            id="graduation" 
+            type="text" 
+            formControlName="graduationYear"
+            placeholder="e.g., 2020 or Expected 2025"
+            [class.invalid]="isFieldInvalid('education.graduationYear')">
+          <span class="error" *ngIf="isFieldInvalid('education.graduationYear')">
+            {{ getErrorMessage('education.graduationYear') }}
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section class="form-section">
+      <h2 class="section-title">Certifications</h2>
+      <div formArrayName="certifications">
+        <div *ngFor="let cert of certifications.controls; let i = index" class="array-item">
+          <div class="form-group">
+            <label>Certification {{ i + 1 }} *</label>
+            <div class="input-with-button">
+              <input 
+                type="text" 
+                [formControlName]="i"
+                placeholder="e.g., AWS Certified Solutions Architect">
+              <button type="button" class="btn-remove" (click)="removeCertification(i)" [disabled]="certifications.length === 1">
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="btn-add" (click)="addCertification()">+ Add Certification</button>
+    </section>
+
+    <!-- Languages Section -->
+    <section class="form-section">
+      <h2 class="section-title">Languages</h2>
+      <div formArrayName="languages">
+        <div *ngFor="let lang of languages.controls; let i = index" 
+             [formGroupName]="i" 
+             class="nested-section-simple">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Language *</label>
+              <input type="text" formControlName="language" placeholder="e.g., English">
+            </div>
+
+            <div class="form-group">
+              <label>Proficiency *</label>
+              <input type="text" formControlName="proficiency" placeholder="e.g., Native, Fluent, Professional">
+            </div>
+          </div>
+          <button type="button" class="btn-remove" (click)="removeLanguage(i)" [disabled]="languages.length === 1">
+            Remove Language
+          </button>
+        </div>
+      </div>
+      <button type="button" class="btn-add" (click)="addLanguage()">+ Add Language</button>
+    </section>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="button" class="btn-secondary" (click)="resetForm()">
+        Reset Form
+      </button>
+      <button type="button" class="btn-preview" (click)="previewResume()" [disabled]="!cvForm.valid">
+        Preview Resume
+      </button>
+      <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Saving...' : 'Save & Generate Resume' }}
+      </button>
+    </div>
+  </form>
+</div>
+

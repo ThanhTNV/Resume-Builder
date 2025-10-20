@@ -1,0 +1,494 @@
+/* ATS-Optimized Resume Styles */
+/* Following the Basic (ATS-Optimized) CV Template specifications */
+
+/* Action Buttons - Visible on screen, hidden in print */
+.action-buttons {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 12px;
+  z-index: 1000;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: Arial, sans-serif;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  .edit-button {
+    background-color: #10b981;
+    color: white;
+
+    &:hover {
+      background-color: #059669;
+    }
+  }
+
+  .print-button {
+    background-color: white;
+    color: #374151;
+    border: 1px solid #d1d5db;
+
+    &:hover {
+      background-color: #f9fafb;
+      border-color: #9ca3af;
+    }
+  }
+
+  .pdf-button {
+    background-color: #2563eb;
+    color: white;
+
+    &:hover {
+      background-color: #1d4ed8;
+    }
+  }
+}
+
+/* Hide action buttons when printing */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Responsive positioning for smaller screens */
+@media screen and (max-width: 768px) {
+  .action-buttons {
+    position: static;
+    justify-content: center;
+    margin: 20px auto;
+    padding: 0 20px;
+
+    button {
+      flex: 1;
+      justify-content: center;
+    }
+  }
+}
+
+.resume-container {
+  /* General Characteristics */
+  max-width: 8.5in;
+  margin: 0 auto;
+  padding: 1in; /* 1-inch margins on all sides */
+  background-color: #fff;
+  color: #000;
+  font-family: Arial, 'Times New Roman', Calibri, sans-serif;
+  font-size: 12pt;
+  line-height: 1.15;
+  text-align: left;
+
+  /* Print optimization */
+  @media print {
+    padding: 0.5in;
+    max-width: 100%;
+  }
+}
+
+/* Header Section */
+.header {
+  text-align: center;
+  margin-bottom: 12pt;
+
+  .name {
+    font-size: 18pt;
+    font-weight: bold;
+    margin: 0 0 6pt 0;
+    color: #000;
+    font-family: Arial, Calibri, sans-serif;
+  }
+
+  .subtitle {
+    font-size: 11pt;
+    margin: 0 0 6pt 0;
+    color: #000;
+    font-weight: normal;
+  }
+
+  .contact-info {
+    font-size: 11pt;
+    margin: 0;
+    color: #000;
+    line-height: 1.5;
+  }
+}
+
+/* Section Styling */
+.section {
+  margin-bottom: 12pt;
+
+  .section-heading {
+    font-size: 14pt;
+    font-weight: bold;
+    margin: 10pt 0 8pt 0;
+    color: #000;
+    border-bottom: none;
+    text-align: left;
+    font-family: Arial, Calibri, sans-serif;
+  }
+}
+
+/* Professional Summary */
+.summary-text {
+  font-size: 12pt;
+  line-height: 1.5;
+  margin: 0;
+  text-align: left;
+}
+
+/* Skills List */
+.skills-list {
+  margin: 0;
+  padding-left: 20pt;
+  list-style-type: disc;
+
+  li {
+    font-size: 12pt;
+    margin-bottom: 6pt;
+    line-height: 1.5;
+  }
+}
+
+/* Work Experience */
+.experience-item {
+  margin-bottom: 12pt;
+
+  .experience-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4pt;
+
+    .job-title {
+      font-size: 12pt;
+      font-weight: bold;
+      color: #000;
+    }
+
+    .date-range {
+      font-size: 11pt;
+      color: #000;
+      font-weight: normal;
+    }
+  }
+
+  .company-location {
+    font-size: 11pt;
+    margin: 0 0 6pt 0;
+    font-style: italic;
+  }
+
+  .responsibilities-list {
+    margin: 0;
+    padding-left: 20pt;
+    list-style-type: disc;
+
+    li {
+      font-size: 12pt;
+      margin-bottom: 6pt;
+      line-height: 1.5;
+    }
+  }
+}
+
+/* Projects */
+.project-item {
+  margin-bottom: 10pt;
+
+  .project-name {
+    font-size: 12pt;
+    font-weight: bold;
+    color: #000;
+    display: block;
+    margin-bottom: 4pt;
+  }
+
+  .project-description {
+    font-size: 12pt;
+    margin: 0 0 6pt 0;
+    line-height: 1.5;
+  }
+
+  .project-highlights {
+    margin: 0;
+    padding-left: 20pt;
+    list-style-type: disc;
+
+    li {
+      font-size: 12pt;
+      margin-bottom: 6pt;
+      line-height: 1.5;
+    }
+  }
+}
+
+/* Education */
+.education-text {
+  font-size: 12pt;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Certifications */
+.certifications-list {
+  margin: 0;
+  padding-left: 20pt;
+  list-style-type: disc;
+
+  li {
+    font-size: 12pt;
+    margin-bottom: 6pt;
+    line-height: 1.5;
+  }
+}
+
+/* Languages */
+.languages-list {
+  margin: 0;
+  padding-left: 20pt;
+  list-style-type: disc;
+
+  li {
+    font-size: 12pt;
+    margin-bottom: 6pt;
+    line-height: 1.5;
+
+    strong {
+      font-weight: bold;
+    }
+  }
+}
+
+/* ATS Compatibility Notes:
+ * - No images, icons, logos, or complex graphics
+ * - Simple single-column layout
+ * - No tables
+ * - Web-safe fonts only (Arial, Times New Roman, Calibri)
+ * - Black text on white background
+ * - Left-aligned text throughout
+ * - Simple list bullets (disc)
+ * - Semantic HTML structure
+ * - No complex CSS (flexbox used minimally for date alignment only)
+ */
+
+/* Responsive Design for Mobile */
+@media screen and (max-width: 600px) {
+  .resume-container {
+    padding: 0.5in;
+  }
+
+  .experience-header {
+    flex-direction: column;
+    align-items: flex-start !important;
+
+    .date-range {
+      margin-top: 2pt;
+    }
+  }
+}
+
+/* Print Styles - Optimized for 1-2 pages */
+@media print {
+  /* Set page margins */
+  @page {
+    size: letter;
+    margin: 0.5in;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .resume-container {
+    max-width: 100%;
+    width: 100%;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: 10pt !important;
+    line-height: 1.1 !important;
+    background-color: #fff;
+  }
+
+  /* Reduce header spacing */
+  .header {
+    margin-bottom: 8pt !important;
+
+    .name {
+      font-size: 16pt !important;
+      margin: 0 0 3pt 0 !important;
+    }
+
+    .subtitle {
+      font-size: 9pt !important;
+      margin: 0 0 3pt 0 !important;
+      line-height: 1.1 !important;
+    }
+
+    .contact-info {
+      font-size: 9pt !important;
+      margin: 0 !important;
+      line-height: 1.2 !important;
+    }
+  }
+
+  /* Reduce section spacing */
+  .section {
+    margin-bottom: 6pt !important;
+    page-break-inside: auto;
+
+    .section-heading {
+      font-size: 12pt !important;
+      margin: 6pt 0 4pt 0 !important;
+      page-break-after: avoid;
+    }
+  }
+
+  /* Reduce text sizes and spacing */
+  .summary-text {
+    font-size: 10pt !important;
+    line-height: 1.2 !important;
+    margin: 0 !important;
+  }
+
+  /* Skills list - tighter spacing */
+  .skills-list {
+    margin: 0 !important;
+    padding-left: 18pt !important;
+
+    li {
+      font-size: 10pt !important;
+      margin-bottom: 3pt !important;
+      line-height: 1.2 !important;
+    }
+  }
+
+  /* Work Experience - compact */
+  .experience-item {
+    margin-bottom: 6pt !important;
+    page-break-inside: avoid;
+
+    .experience-header {
+      margin-bottom: 2pt !important;
+
+      .job-title {
+        font-size: 10pt !important;
+      }
+
+      .date-range {
+        font-size: 9pt !important;
+      }
+    }
+
+    .company-location {
+      font-size: 9pt !important;
+      margin: 0 0 3pt 0 !important;
+    }
+
+    .responsibilities-list {
+      margin: 0 !important;
+      padding-left: 18pt !important;
+
+      li {
+        font-size: 10pt !important;
+        margin-bottom: 2pt !important;
+        line-height: 1.2 !important;
+      }
+    }
+  }
+
+  /* Projects - compact */
+  .project-item {
+    margin-bottom: 6pt !important;
+    page-break-inside: avoid;
+
+    .project-name {
+      font-size: 10pt !important;
+      margin-bottom: 2pt !important;
+    }
+
+    .project-description {
+      font-size: 10pt !important;
+      margin: 0 0 3pt 0 !important;
+      line-height: 1.2 !important;
+    }
+
+    .project-highlights {
+      margin: 0 !important;
+      padding-left: 18pt !important;
+
+      li {
+        font-size: 10pt !important;
+        margin-bottom: 2pt !important;
+        line-height: 1.2 !important;
+      }
+    }
+  }
+
+  /* Education - compact */
+  .education-text {
+    font-size: 10pt !important;
+    margin: 0 !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Certifications - compact */
+  .certifications-list {
+    margin: 0 !important;
+    padding-left: 18pt !important;
+
+    li {
+      font-size: 10pt !important;
+      margin-bottom: 2pt !important;
+      line-height: 1.2 !important;
+    }
+  }
+
+  /* Languages - compact */
+  .languages-list {
+    margin: 0 !important;
+    padding-left: 18pt !important;
+
+    li {
+      font-size: 10pt !important;
+      margin-bottom: 2pt !important;
+      line-height: 1.2 !important;
+    }
+  }
+
+  /* Remove shadows and transitions */
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
