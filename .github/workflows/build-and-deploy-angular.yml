@@ -1,0 +1,77 @@
+name: Build & Deploy Angular to GitHub Pages
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+env:
+  # Angular project name per your angular.json
+  NG_APP_NAME: resume-builder
+  # Derive base-href for project pages (user.github.io/<repo>/)
+  BASE_HREF: /${{ github.event.repository.name }}/
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Build notes:
+      # - Your angular.json uses the application builder with SSR output.
+      # - For GitHub Pages (static hosting), we deploy ONLY the browser build.
+      # - We set base-href to "/<repo>/" so assets work on project pages.
+      # - If your Angular version supports prerender, the flag is kept; otherwise it is ignored.
+      - name: Build (Angular)
+        run: |
+          npm run build -- --configuration=production --base-href "${BASE_HREF}" --prerender || \
+          npm run build -- --configuration=production --base-href "${BASE_HREF}"
+      
+      - name: Prepare static output (browser only)
+        run: |
+          DIST_DIR="dist/${NG_APP_NAME}/browser"
+          if [ ! -d "$DIST_DIR" ]; then
+            echo "Expected browser output at $DIST_DIR not found."
+            echo "Build produced:"
+            ls -la dist || true
+            exit 1
+          fi
+          # SPA fallback for deep links
+          cp "$DIST_DIR/index.html" "$DIST_DIR/404.html"
+          # Avoid Jekyll processing on GitHub Pages
+          touch "$DIST_DIR/.nojekyll"
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact (static site)
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/${{ env.NG_APP_NAME }}/browser
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
